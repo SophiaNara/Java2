@@ -404,7 +404,7 @@ public class StringList {
         return arr;
     }
 
-    /*
+    /**
      *
      * Removes all the elements of this list that satisfy the given filter.
      *

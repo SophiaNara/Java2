@@ -15,11 +15,13 @@ class StringListTest {
 
     StringList list;
     StringList PPI;
+    StringList material;
 
     @BeforeEach
     void setUp() {
         list = new StringList();
         PPI = new StringList();
+        material = new StringList();
 
         PPI.add("crude oil");
         PPI.add("livestock");
@@ -29,6 +31,10 @@ class StringListTest {
         PPI.add("clothing");
         PPI.add("cosmetics");
 
+        material.add("crude oil");
+        material.add("livestock");
+        material.add("lumber");
+
     }
 
     @ParameterizedTest
@@ -37,6 +43,16 @@ class StringListTest {
     void testAddAndGet(String element) {
         list.add(element);
         assertEquals(element, list.get(0));
+
+    }
+
+    @ParameterizedTest
+    @DisplayName("SL-1-2 Testing Get String with invalid index and throws IllegalArgumentException.")
+    @CsvSource({"-1","7","8","10","20","30"})
+    void testGetInvalid(int n) {
+
+        Assertions.assertThrows( IllegalArgumentException.class, () -> PPI.get(n));
+
     }
 
 
@@ -63,15 +79,18 @@ class StringListTest {
     @DisplayName("SL-4 Testing String Grow and Size function.")
     void testGrowAndSize() {
 
+        assertEquals(0, list.size());
         list.add("a");
         list.add("b");
         list.add("c");
         list.add("d");
         list.add("e");
         list.add("f");
-
-        assertEquals(6, list.size());
-        assertEquals("e", list.get(4));
+        assertAll(
+                () -> assertEquals(6, list.size()),
+                () ->assertEquals("f", list.get(5)),
+                () ->assertEquals("e", list.get(4))
+        );
 
     }
 
@@ -227,27 +246,131 @@ class StringListTest {
     }
 
     @Test
-    @DisplayName("SL-19 Testing removeRange in normal scenario")
-    void lastIndexOf() {
+    @DisplayName("SL-20 Testing removeRange in toIndex == fromIndex")
+    void removeRangeToEqualsFrom() {
+
+        PPI.removeRange(2,2);
+        String exp = "Printing List: [crude oil, livestock, lumber, gasoline, cotton, clothing, cosmetics]";
+        assertEquals(exp, PPI.toString());
+//        PPI.removeRange(0,2);
+//        exp = "Printing List: [lumber, gasoline, cotton, clothing, cosmetics]";
+//        assertEquals(exp, PPI.toString());
+//        PPI.removeRange(3,4);
+//        exp = "Printing List: [lumber, gasoline, cotton, cosmetics]";
+//        assertEquals(exp, PPI.toString());
+
     }
 
-    @org.junit.jupiter.api.Test
-    void clear() {
+    @ParameterizedTest
+    @DisplayName("SL-21 Testing removeRange in toIndex < fromIndex / Indices out of order")
+    @CsvSource({"5,2","4,1","7,0"})
+    void removeRangeToLessFrom(int f, int t) {
+
+        Exception ex = assertThrows( IllegalArgumentException.class, () -> PPI.removeRange(f,t));
+        assertTrue(ex.getMessage().contains("Indices out of order"));
     }
 
-    @org.junit.jupiter.api.Test
-    void isEmpty() {
+    @ParameterizedTest
+    @DisplayName("SL-22 Testing removeRange in scenario, out of boundary: Invalid index")
+    @CsvSource({"7,9","-1,1","-8,-2"})
+    void removeRangeInvalid(int from, int to) {
+
+        Exception ex = assertThrows( IllegalArgumentException.class, () -> PPI.subList(from,to));
+        assertAll(
+                () -> assertTrue(ex.getMessage().contains("Invalid index")),
+                () ->assertEquals("Invalid index", ex.getMessage())
+        );
+
     }
 
-    @org.junit.jupiter.api.Test
+    @ParameterizedTest
+    @DisplayName("SL-23 Testing lastIndexOf in normal scenario")
+    @CsvSource({"2, lumber", "4, cotton", "6, cosmetics", "7, crude oil"})
+    void testLastIndexOf(int index, String e) {
+
+        PPI.add("crude oil");
+        assertEquals(index, PPI.lastIndexOf(e));
+
+    }
+
+    @ParameterizedTest
+    @DisplayName("SL-24 Testing lastIndexOf does not contain the element with Start/EndsWithFilter")
+    @CsvSource({"cotton", "lumber", "clothing", "cosmetics"})
+    void testLastIndexOfNotFound( String e) {
+
+        EndsWithFilter endsWithEr = new EndsWithFilter(PPI, "er");
+        EndsWithFilter endsWithIng = new EndsWithFilter(PPI, "ing");
+        StartsWithFilter startsWithCo = new StartsWithFilter(PPI, "co");
+        PPI.removeIf(endsWithEr);
+        PPI.removeIf(endsWithIng);
+        PPI.removeIf(startsWithCo);
+        assertEquals(-1, PPI.lastIndexOf(e));
+
+    }
+
+
+
+    @Test
+    @DisplayName("SL-25 Testing clear and isEmpty")
+    void testClearAndIsEmpty() {
+
+        assertFalse(PPI.isEmpty());
+        PPI.clear();
+
+        assertAll(
+                () -> assertEquals(0, PPI.size()),
+                () -> assertFalse(PPI.contains("cotton")),
+                () -> assertTrue(PPI.isEmpty())
+        );
+
+    }
+
+
+    @Test
+    @DisplayName("SL-26 Testing two list whether contain the same elements in the same order")
     void testEquals() {
+
+        assertFalse(PPI.equals(material));
+        PPI = PPI.subList(0,3);
+        assertTrue(PPI.equals(material));
+        PPI.clear();
+        //assertEquals("", PPI.toString());
+        StringList testList = new StringList();
+        assertAll(
+                () -> assertEquals(false, material.equals(PPI)),
+        /** sl == this */
+                () -> assertTrue(PPI.equals(PPI), "sl == this should return true"),
+        /** sl == null */
+                () -> assertTrue(testList.isEmpty(), "check whether sl is empty"),
+                () -> assertFalse(list.equals(testList), "sl == null should return false")
+        );
+
+
+
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
+    @DisplayName("SL-27 Testing method convert list to an array ")
     void toArray() {
+
+        String[]list = PPI.toArray();
+        assertAll(
+                () -> assertEquals(PPI.size(), list.length),
+                () -> assertEquals("crude oil", list[0]),
+                () -> assertEquals(PPI.get(3), list[3]),
+                () -> assertEquals(PPI.get(6), list[6])
+        );
+
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
+    @DisplayName("SL-28 Testing removeIf with ContainsFilter")
     void removeIf() {
+
+        ContainsFilter containsFilterOT = new ContainsFilter(PPI,"ot");
+        PPI.removeIf(containsFilterOT);
+        assertFalse(PPI.contains("cotton"));
+
     }
+
 }
