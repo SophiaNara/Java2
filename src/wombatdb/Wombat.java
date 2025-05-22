@@ -24,9 +24,9 @@ public class Wombat implements DBComponent {
      * @param name   the name of the Wombat
      * @param length the length of the Wombat
      */
-    public Wombat(String name, String length) {
+    public Wombat(String name, int length) {
         this.name = name;
-        this.length = Integer.parseInt(length);
+        this.length = length;
         id = next_id++;
     }
 

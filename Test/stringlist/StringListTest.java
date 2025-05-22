@@ -19,9 +19,9 @@ class StringListTest {
 
     @BeforeEach
     void setUp() {
-        list = new StringList();
+        list = new StringList(5);
         PPI = new StringList();
-        material = new StringList();
+        material = new StringList(1);
 
         PPI.add("crude oil");
         PPI.add("livestock");
@@ -46,8 +46,20 @@ class StringListTest {
 
     }
 
+    @Test
+    @DisplayName("SL-1-2 Testing  the list is full then call grow() function.")
+    void testGrow () {
+        StringList addList = new StringList(2);
+        addList.add("ww");
+        addList.add("ww");
+        addList.add(1,"ewe");
+        assertEquals("ww", addList.get(0));
+        assertEquals("ewe", addList.get(1));
+    }
+
+
     @ParameterizedTest
-    @DisplayName("SL-1-2 Testing Get String with invalid index and throws IllegalArgumentException.")
+    @DisplayName("SL-1-3 Testing Get String with invalid index and throws IllegalArgumentException.")
     @CsvSource({"-1","7","8","10","20","30"})
     void testGetInvalid(int n) {
 
@@ -272,7 +284,7 @@ class StringListTest {
 
     @ParameterizedTest
     @DisplayName("SL-22 Testing removeRange in scenario, out of boundary: Invalid index")
-    @CsvSource({"7,9","-1,1","-8,-2"})
+    @CsvSource({"2,9","-1,1","-4,-2","2,8"})
     void removeRangeInvalid(int from, int to) {
 
         Exception ex = assertThrows( IllegalArgumentException.class, () -> PPI.subList(from,to));
@@ -335,16 +347,15 @@ class StringListTest {
         assertTrue(PPI.equals(material));
         PPI.clear();
         //assertEquals("", PPI.toString());
-        StringList testList = new StringList();
+        // StringList testList = new StringList();
         assertAll(
                 () -> assertEquals(false, material.equals(PPI)),
         /** sl == this */
                 () -> assertTrue(PPI.equals(PPI), "sl == this should return true"),
         /** sl == null */
-                () -> assertTrue(testList.isEmpty(), "check whether sl is empty"),
-                () -> assertFalse(list.equals(testList), "sl == null should return false")
+                // () -> assertTrue(testList.isEmpty(), "check whether sl is empty"),
+                () -> assertFalse(list.equals(null), "sl == null should return false")
         );
-
 
 
     }
