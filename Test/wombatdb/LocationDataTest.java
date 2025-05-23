@@ -53,7 +53,6 @@ class LocationDataTest {
 
     @Test
     @DisplayName("Location 2 Test number of columns")
-
     void testGetNumberOfColumns() {
         assertEquals(3,loc1.getNumberOfColumns());
         assertEquals(3,loc2.getNumberOfColumns());
@@ -79,7 +78,7 @@ class LocationDataTest {
 
     @Test
     @DisplayName("Location 4 Test Get a particular column name with an index")
-    void getColumnName() {
+    void testGetColumnName() {
         assertAll(
                 () -> assertEquals("name", loc1.getColumnName(1)),
                 () -> assertEquals("loc.x", loc1.getColumnName(2)),

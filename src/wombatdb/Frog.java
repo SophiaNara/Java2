@@ -98,16 +98,11 @@ public class Frog implements DBComponent {
      */
     @Override
     public String toString() {
-
-        String result =
-                "Frog: " +
+        return "Frog: " +
                 "name = " + name + ", " +
                 "color = " + color + ", " +
                 "weight = " + weight + "g, " +
                 "length = " + length + "cm";
-
-
-        return result;
     }
 
     /**
