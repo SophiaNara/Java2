@@ -117,4 +117,5 @@ public class LocationData implements DBComponent {
     public int compare(Object o1, Object o2) {
         return 0;
     }
+
 }

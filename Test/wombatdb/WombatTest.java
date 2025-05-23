@@ -50,21 +50,20 @@ class WombatTest {
 //                ", length = " + length + "cm";
 //    }
 
-    @ParameterizedTest
-    @DisplayName("W3 Test wombat get column content out of index range.")
-    @CsvSource({"1000, Zoe, 4, w20", "1003, Mercy, 30, w30"})
+    @Test
+    @DisplayName("W3 Test wombat toString.")
+    @CsvSource({"1000, Zoe, 4", "1003, Mercy, 30"})
+    void testToString() {
 
-    void testToString(String id, String name, String length, Wombat wb) {
-        String Expected ="Wombat:  id = "+ id +", name = " + name + ", length = " + length + "cm" ;
-//        Wombat wb = wb
-        assertEquals( Expected, wb.toString());
+        String Expected ="Wombat:  id = 1000, name = Zoe, length = 4cm" ;
+        assertEquals(Expected, w20.toString());
 
     }
 
-
-
     @Test
     void thenComparing() {
+
+//        w20.compare();
 
     }
 

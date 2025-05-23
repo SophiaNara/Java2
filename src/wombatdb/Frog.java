@@ -12,11 +12,11 @@ public class Frog implements DBComponent {
     /**
      * Default constructor: used to get an instance for use with insert and select clauses
      */
-    public Frog() {
-        name = "";
-        color = "";
-        weight = 0;
-        length = 0;
+    public Frog(String name, String color, int weight, int length) {
+        this.name = "";
+        this.color = "";
+        this.weight = 0;
+        this.length = 0;
     }
 
     /**
@@ -98,11 +98,16 @@ public class Frog implements DBComponent {
      */
     @Override
     public String toString() {
-        return "Frog: " +
+
+        String result =
+                "Frog: " +
                 "name = " + name + ", " +
                 "color = " + color + ", " +
                 "weight = " + weight + "g, " +
                 "length = " + length + "cm";
+
+
+        return result;
     }
 
     /**
