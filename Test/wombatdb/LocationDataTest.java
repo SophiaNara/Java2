@@ -30,6 +30,7 @@ class LocationDataTest {
         loc2 = new LocationData("Sturt", "234","567");
         loc3 = new LocationData("Bedford campus", "123","456");
     }
+        // loc1 = new LocationData("Bedford campus", "123", "456");
 
     @Test
     @DisplayName("Location 0 Test constructor with a invalid x or y")
@@ -101,62 +102,50 @@ class LocationDataTest {
                 " --------------", loc2.getStructure());
     }
 
+//    loc2 = new LocationData("Sturt", "234","567");
+//    loc3 = new LocationData("Bedford campus", "123","456");
+//    loc1 = new LocationData("Bedford campus", "123", "456");
 
-    @ParameterizedTest
+
+    @Test
     @DisplayName("Location 6-1 Test Compare expected negative integer")
-    @CsvSource({"1,-17","2,-1","3,-1"})
-    void compare(int index, int result) {
-
-        assertEquals(result, loc1.getColumn(index).compareTo(loc2.getColumn(index)));
-
+    void testCompare() {
+        int actual = loc1.compare(loc1, loc2);
+        // System.out.println(actual);
+        assertTrue(actual < 0);
     }
 
-    @ParameterizedTest
+    @Test
     @DisplayName("Location 6-2 Test Compare expected positive integer")
-    @CsvSource({"1,17","2,1","3,1"})
-    void testComparePositive(int index, int result) {
-//        System.out.println(
-//                loc2.getColumn(1).compareTo(loc1.getColumn(1))
-//        );
-//
-//        System.out.println(
-//                loc1.getColumn(2).compareTo(loc2.getColumn(2))
-//        );
-
-        assertEquals(result, loc2.getColumn(index).compareTo(loc1.getColumn(index)));
-
+    void testComparePositive() {
+        int actual2 = loc1.compare(loc2, loc1);
+        assertFalse(actual2 < 0);
     }
 
-    @ParameterizedTest
+    @Test
     @DisplayName("Location 6-3 Test Compare expected return zero")
-    @CsvSource({"1","2","3"})
-    void testCompareZero(int index) {
-
-        assertEquals(0, loc1.getColumn(index).compareTo(loc3.getColumn(index)));
-
+    void testCompareZero() {
+        LocationData locZero = new LocationData("Bedford campus", "123", "456");
+        assertEquals(0, loc1.compare(loc1, locZero));
     }
 
     @Test
     @DisplayName("Location 6-4 Test an argument is null")
     void testCompareWithNull() {
 
-        LocationData locEmpty = new LocationData(null, "123","789");
-        assertThrows( NullPointerException.class ,() -> loc1.getColumn(1).compareTo(null));
-        assertThrows( NullPointerException.class, () -> locEmpty.getColumn(1).compareTo(loc1.getColumn(1)));
+        assertThrows( NullPointerException.class ,() -> loc1.compare(loc1, null));
+        assertThrows( NullPointerException.class, () -> loc1.compare(null, loc1));
 
     }
 
     @Test
     @DisplayName("Location 6-5 Test an argument is in ClassCastException")
     void testCompareClassCastException() {
-
+        LocationData loc5 = new LocationData();
         Wombat wombat = new Wombat("Fred", 15);
-
-        LocationData comparator = new LocationData();
-        assertThrows(ClassCastException.class, () -> comparator.compare(wombat, loc1));
-
-//        assertThrows( ClassCastException.class ,() -> loc1.getColumn(1).compareTo(wombat.getColumn(1)));
-//        assertThrows( ClassCastException.class, () -> wombat.getColumn(1).compareTo(loc1.getColumn(1)));
+        Frog f = new Frog("Name", "color","11","10");
+        assertThrows(ClassCastException.class, () -> loc1.compare(wombat, loc1));
+        assertThrows(ClassCastException.class, () -> loc5.compare(f, loc5));
 
     }
 

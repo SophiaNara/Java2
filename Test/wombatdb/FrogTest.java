@@ -23,7 +23,6 @@ class FrogTest {
         frog1 = new Frog(fName,fColor,fWeight,fLength);
         frog2 = new Frog("Grace", "pink", "13", "10");
         frog3 = new Frog(fName,fColor,fWeight3,fLength3);
-
     }
 
     @Test
@@ -98,45 +97,45 @@ class FrogTest {
                 " --------------------------------", frog1.getStructure());
     }
 
-    @ParameterizedTest
-    @DisplayName("Frog 6-1 Test Compare expected negative and positive integer")
-    @CsvSource({"1,3","2,-23","3,-2","4,4"})
-    void compare(int index, int result) {
-
-        assertEquals(result, frog3.getColumn(index).compareTo(frog2.getColumn(index)));
-
-    }
-
-    @ParameterizedTest
-    @DisplayName("Location 6-3 Test Compare expected return zero")
-    @CsvSource({"1","2","3", "4"})
-    void testCompareZero(int index) {
-        Frog frog4 = new Frog("Grace", "pink", "13", "10");
-        assertEquals(0, frog2.getColumn(index).compareTo(frog4.getColumn(index)));
-
+    // for reference   frog2 = new Frog("Grace", "pink", "13", "10");
+    //    frog3 = new Frog("John","Yellow","11","14");
+    @Test
+    @DisplayName("Frog 6-1 Test Compare expected negative and Positive integer（compare column3 weight）")
+    void testCompareNegative() {
+        Frog f1 = new Frog("Sweet","Yellow","14","14");
+        int result = f1.compare(frog3, f1);
+        int result2 = f1.compare(f1, frog3);
+        // System.out.println(result);
+        assertTrue(result < 0);
+        assertFalse(result2 < 0);
     }
 
     @Test
-    @DisplayName("Frog 6-4 Test an argument is null")
+    @DisplayName("Frog 6-2 Test Compare expected return zero")
+    void testCompareZero() {
+        Frog f1 = new Frog("Sweet","Yellow","11","14");
+        int result = f1.compare(frog3, f1);
+        // System.out.println(result);
+        assertEquals(0, result);
+    }
+
+    @Test
+    @DisplayName("Frog 6-3 Test an argument is null")
     void testCompareWithNull() {
-        Frog frog5 = new Frog(null, "pink", "13", "10");
-        assertThrows( NullPointerException.class ,() -> frog1.getColumn(1).compareTo(null));
-        assertThrows( NullPointerException.class, () -> frog5.getColumn(1).compareTo(frog1.getColumn(1)));
 
+        assertThrows( NullPointerException.class ,() -> frog1.compare(frog1, null));
+        assertThrows( NullPointerException.class ,() -> frog2.compare(null, frog2));
     }
 
     @Test
-    @DisplayName("Location 6-5 Test an argument is in ClassCastException")
+    @DisplayName("Frog 6-4 Test an argument is in ClassCastException")
     void testCompareClassCastException() {
 
         Wombat wombat = new Wombat("Fred", 15);
-
-        LocationData comparator = new LocationData();
-        assertThrows(ClassCastException.class, () -> comparator.compare(wombat, frog1));
-
-//        assertThrows( ClassCastException.class ,() -> loc1.getColumn(1).compareTo(wombat.getColumn(1)));
-//        assertThrows( ClassCastException.class, () -> wombat.getColumn(1).compareTo(loc1.getColumn(1)));
+        assertThrows(ClassCastException.class, () -> frog1.compare(wombat, frog2));
 
     }
+
+
 
 }

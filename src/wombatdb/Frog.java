@@ -124,4 +124,29 @@ public class Frog implements DBComponent {
     public int compare(Object o1, Object o2) {
         return 0;
     }
+
+//    public int compare(Object o1, Object o2) {
+//           if(o1 == null || o2 == null) {
+//               throw new NullPointerException("Arguments must not be full");
+//           }
+//
+//           if(!(o1 instanceof Frog) || !(o2 instanceof Frog)) {
+//               throw new ClassCastException("ar must be of type of frog");
+//           }
+//
+//           Frog f1 = (Frog) o1;
+//           Frog f2 = (Frog) o2;
+//
+//           return Integer.compare(
+//                   Integer.parseInt(f1.getColumn(3)),
+//                   Integer.parseInt(f2.getColumn(3))
+//           );
+//    }
+
+
+
+
+
 }
+
+

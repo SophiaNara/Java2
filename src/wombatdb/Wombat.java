@@ -113,4 +113,23 @@ public class Wombat implements DBComponent {
     public int compare(Object o1, Object o2) {
         return 0;
     }
+
+//        public int compare(Object o1, Object o2) {
+//           if(o1 == null || o2 == null) {
+//               throw new NullPointerException("Arguments must not be full");
+//           }
+//
+//           if(!(o1 instanceof Wombat) || !(o2 instanceof Wombat)) {
+//               throw new ClassCastException("ar must be of type of frog");
+//           }
+//
+//           Wombat f1 = (Wombat) o1;
+//        Wombat f2 = (Wombat) o2;
+//
+//           return Integer.compare(
+//                   Integer.parseInt(f1.getColumn(1)),
+//                   Integer.parseInt(f2.getColumn(1))
+//           );
+//    }
+
 }

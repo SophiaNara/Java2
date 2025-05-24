@@ -114,8 +114,24 @@ public class LocationData implements DBComponent {
      *                              being compared by this comparator.
      */
     @Override
+//    public int compare(Object o1, Object o2) {
+//        return 0;
+//    }
+
     public int compare(Object o1, Object o2) {
-        return 0;
+
+        if (o1 == null || o2 == null) {
+            throw new NullPointerException("Arguments must not be null");
+        }
+
+        if (!(o1 instanceof LocationData) || !(o2 instanceof LocationData)) {
+            throw new ClassCastException("Objects must be of type LocationData");
+        }
+
+        LocationData l1 = (LocationData) o1;
+        LocationData l2 = (LocationData) o2;
+
+        return l1.name.compareTo(l2.name);
     }
 
 }
