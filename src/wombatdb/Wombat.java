@@ -18,6 +18,10 @@ public class Wombat implements DBComponent {
         id = -1;
     }
 
+    public int getId() {
+        return id;
+    }
+
     /**
      * Create a new Wombat
      *

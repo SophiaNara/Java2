@@ -9,17 +9,18 @@ import org.junit.jupiter.params.provider.CsvSource;
 import static org.junit.jupiter.api.Assertions.*;
 
 class WombatTest {
-    public static Wombat w1;
-    public static Wombat w20;
-    public static  Wombat w30;
-    public static Wombat w40;
+    public Wombat w1;
+    public Wombat w20;
+    public Wombat w30;
+    public Wombat w40;
 
     @BeforeEach
     void setUp() {
-         w1 = new Wombat();
-         w20 = new Wombat("Zoe", 4);
-         w30 = new Wombat("Sherry", 20);
-         w40 = new Wombat("Mercy", 30);
+        Wombat.next_id = 1000;
+        w1 = new Wombat();
+        w20 = new Wombat("Zoe", 4);
+        w30 = new Wombat("Sherry", 20);
+        w40 = new Wombat("Mercy", 30);
     }
 
     @Test
