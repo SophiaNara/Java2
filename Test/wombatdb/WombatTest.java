@@ -18,9 +18,9 @@ class WombatTest {
     void setUp() {
         Wombat.next_id = 1000;
         w1 = new Wombat();
-        w20 = new Wombat("Zoe", 4);
-        w30 = new Wombat("Sherry", 20);
-        w40 = new Wombat("Mercy", 30);
+        w20 = new Wombat("Zoe", "4");
+        w30 = new Wombat("Sherry", "20");
+        w40 = new Wombat("Mercy", "30");
     }
 
     @Test
@@ -36,7 +36,7 @@ class WombatTest {
     void testToString() {
 
         String Expected ="Wombat:  id = 1000, name = Zoe, length = 4cm" ;
-        Wombat w3 = new Wombat("Faith", 5);
+        Wombat w3 = new Wombat("Faith", "5");
         String Expected2 ="Wombat:  id = 1003, name = Faith, length = 5cm" ;
         assertAll(
                 () -> assertEquals(Expected, w20.toString()),

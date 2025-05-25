@@ -18,19 +18,15 @@ public class Wombat implements DBComponent {
         id = -1;
     }
 
-    public int getId() {
-        return id;
-    }
-
     /**
      * Create a new Wombat
      *
      * @param name   the name of the Wombat
      * @param length the length of the Wombat
      */
-    public Wombat(String name, int length) {
+    public Wombat(String name, String length) {
         this.name = name;
-        this.length = length;
+        this.length = Integer.parseInt(length);
         id = next_id++;
     }
 

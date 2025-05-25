@@ -41,8 +41,6 @@ public class WombatDB {
                 System.out.println(nc.getMessage().replaceFirst(".*practical6.NoColumn: ", ""));
             }
         } while (!prompt.equalsIgnoreCase("quit"));
-
-
     }
 
     private ArrayList<String> splitLine(String input) {

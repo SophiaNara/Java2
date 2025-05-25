@@ -142,7 +142,7 @@ class LocationDataTest {
     @DisplayName("Location 6-5 Test an argument is in ClassCastException")
     void testCompareClassCastException() {
         LocationData loc5 = new LocationData();
-        Wombat wombat = new Wombat("Fred", 15);
+        Wombat wombat = new Wombat("Fred", "15");
         Frog f = new Frog("Name", "color","11","10");
         assertThrows(ClassCastException.class, () -> loc1.compare(wombat, loc1));
         assertThrows(ClassCastException.class, () -> loc5.compare(f, loc5));
