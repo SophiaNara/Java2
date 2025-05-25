@@ -13,14 +13,13 @@ class FrogTest {
 
     public String fName = "John";
     public String fColor = "Yellow";
-    public int fWeight = 1;
-    public int fLength = 1;
+
     public String fWeight3 = "11";
     public String fLength3 = "14";
 
     @BeforeEach
     void setUp() {
-        frog1 = new Frog(fName,fColor,fWeight,fLength);
+        frog1 = new Frog();
         frog2 = new Frog("Grace", "pink", "13", "10");
         frog3 = new Frog(fName,fColor,fWeight3,fLength3);
     }
@@ -29,10 +28,10 @@ class FrogTest {
     @DisplayName("Frog 1 Test Default constructor and toString (weight and length is int)")
     void testFirstConstructorString() {
         // System.out.println(frog2.toString());
-        String expected = "Frog: name = " + fName +
-                         ", color = " + fColor +
-                            ", weight = " + fWeight +
-                            "g, length = " + fLength +"cm";
+        String expected = "Frog: name = " + "" +
+                         ", color = " + "" +
+                            ", weight = " + 0 +
+                            "g, length = " + 0 +"cm";
         assertEquals(expected, frog1.toString());
 
     }

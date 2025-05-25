@@ -12,7 +12,7 @@ public class Frog implements DBComponent {
     /**
      * Default constructor: used to get an instance for use with insert and select clauses
      */
-    public Frog(String name, String color, int weight, int length) {
+    public Frog() {
         this.name = "";
         this.color = "";
         this.weight = 0;

@@ -106,10 +106,10 @@ class WombatDBTest {
     void testInsertRequirement() {
         input("addtable Wombat\n"+
                 "insert Wombat joice notanint\n" + /* Test: Expecting int, found "..."  */
-                "insert     Wombat    joice 54\n" + "printdb\n" + /* Test: normal but with space */
+                "insert     Wombat    joice 54\n" + "printdb\n" + /* Test: invalid parameter list: printdb */
                 "insert Wombat 150\n" + /* Test insufficient parameter: Invalid parameter list: insert  */
-                "quit extra junk\n" +  /* Test: Invalid parameter list: printdb  */
-                "printdb Wombat\n" + "quit"); /*Invalid parameter list: quit*/
+                "quit extra junk");   /* Test: invalid parameter list: quit  */
+
         new WombatDB().commandLoop();
         String output = outResult.toString();
 //        assertEquals("",output);
@@ -127,52 +127,115 @@ class WombatDBTest {
     }
 
     @Test
-    @DisplayName("Stage 6-2 Test insert requirement")
+    @DisplayName("Stage 6-2 Test insert requirement: error message- Invalid table name: ...")
     void testInvalidTableName() {
-        input("addtable Sophia\n"+
-                "insert     Wombat    joice 54\n" + "printdb\n" +
-                "insert Wombat 150\n" + "quit extra junk\n" + // Test insufficient parameter, should be three in Wombat
-                "printdb Wombat\n" + "quit");
+        input("addtable Wombat\n"+
+                "insert Student joice 54\n" +
+                "printdb Student");
         new WombatDB().commandLoop();
         String output = outResult.toString();
-        assertEquals("",output);
+        // assertEquals("",output);
 
         assertAll(
-                () -> assertTrue(output.contains("Parameter 3 = notanint")),
-                () -> assertTrue(output.contains("Invalid table name: ... (should be of type RuntimeException)"))
+                () -> assertTrue(output.contains("Invalid table name: Student")),
+                () -> assertTrue(output.contains("java.lang.RuntimeException: Invalid table name:"), "print db is not Wombat expected throw : java.lang.RuntimeException:")
+        );
+    }
+
+    @Test
+    @DisplayName("Stage 7 Test Invalid table name and invalid parameter list")
+    void testInvalidParameter() {
+        input(" addtable LocationData\n"+
+              " insert LocationData fred 40 50\n" +
+              " insert Locationdata julie 30 xxx\n" +
+              " insert LocationData julie 30 xx\n" +
+              " printdb LocationData");
+        new WombatDB().commandLoop();
+        String output = outResult.toString();
+        // assertEquals("", output);
+        assertAll(
+                () -> assertTrue(output.contains("Invalid table name: Locationdata")),
+                () -> assertTrue(output.contains("Invalid parameter list: insert")),
+                () -> assertTrue(output.contains("fred is at Location java.awt.Point[x=40,y=50]"))
         );
     }
 
 
-
-
-
-        @Test
-    @DisplayName("Test do_insert(input）command")
-    void testDo_insert() {
-
-        input(" addtable Wombat\ninsert Wombat 001 Alice");
+    @Test
+    @DisplayName("Stage 8 Test select column from table ")
+    void testSelectFromTable() {
+        input(" addtable Frog\n"+
+                " insert Frog kermit green 50 12\n" +
+                " insert Frog kermit green 50 junk\n" + /* Expected result: Invalid parameter list: insert*/
+                " insert Frog toad brown 100 20\n" +
+                " select 1 from Frog\n" +
+                " select 2 from Frog\n" +
+                " select -1 from Frog\n" + /* Invalid column index: -1 */
+                " select 1 2 3 4 from Frog\n" +
+                " select 1  3  5  7 from Frog\n" +
+                " select 5 from Frog\n" + /* Invalid column index: 5 */
+                " select e from Frog\n" + /* Invalid parameter list: select */
+                " select 2 from Junk\n" + /* Invalid table name: Junk */
+                " select * from Frog");  /* test fillColArray if (star) */
         new WombatDB().commandLoop();
         String output = outResult.toString();
-
+        //assertEquals("", output);
         assertAll(
-                () -> assertTrue(output.contains("Parameter 1 = Wombat")),
-                () -> assertTrue(output.contains("Parameter 2 = 001")),
-                () -> assertTrue(output.contains("Parameter 3 = Alice"))
-        );
+                () -> assertTrue(output.contains("Invalid parameter list: insert")),
+                () -> assertTrue(output.contains("| name | weight | Invalid column index: 5")),
+                () -> assertTrue(output.contains("Invalid column index: 5")),
+                () -> assertTrue(output.contains("Invalid column index: -1")),
+                () -> assertTrue(output.contains("| name | color | weight | length |")),
+                () -> assertTrue(output.contains("kermit\tgreen\t50\t12\t")),
+                () -> assertTrue(output.contains("Invalid parameter list: select")),
+                () -> assertTrue(output.contains("Invalid table name: Junk")),
+                () -> assertTrue(output.contains("kermit")),
+                () -> assertTrue(output.contains("toad")),
+                () -> assertTrue(output.contains("kermit\tgreen\t50\t12")),
+                () -> assertTrue(output.contains("toad\tbrown\t100\t20")),
+                () -> assertTrue(output.contains("| color |")),
+                () -> assertTrue(output.contains("green"))
 
-//                 assertEquals("Starting command loop\n"+
-//                         "1? Command = addtable\n"+
-//                         "Parameter 1 = Wombat\n"+
-//                         "2? Command = insert\n"+
-//                         "Parameter 1 = Wombat\n"+
-//                         "Parameter 2 = 001\n"+
-//                         "Parameter 3 = Alice", output);
+        );
     }
 
+    @Test
+    @DisplayName("Stage 9 Test select column from table ")
+    void testDo_desctable() {
 
+        input(" addtable Frog\n"+ " addtable Wombat\n"+
+                " insert Frog kermit green 50 12\n" +
+                " insert Frog kermit green 50 junk\n" + /* Expected result: Invalid parameter list: insert*/
+                " insert Frog toad brown 100 20\n" +
+                " describe Frog\n" + " describe Wombat\n" + " describe LocationData\n");
+        new WombatDB().commandLoop();
+        String output = outResult.toString();
+        //assertEquals("", output);
+        assertAll(
+                () -> assertTrue(output.contains("| name | color | weight | length |")),
+                () -> assertTrue(output.contains("--------------------------------")),
+                () -> assertTrue(output.contains("| id | name | length |")),
+                () -> assertTrue(output.contains("Invalid table name: LocationData"))
+        );
 
+    }
 
+    @Test
+    @DisplayName("Stage 10 invalid class name")
+    void testInvalidClass() {
 
+        input(" addtable FictionalTable\n" + " printdb FictionalTable\n" + "select 1 from FictionalTable" );
+        new WombatDB().commandLoop();
+        String output = outResult.toString();
+        //assertEquals("", output);
+        assertFalse(output.contains("Invalid Class name: FictionalTable"));
+        /** Due to private void do_select and do_printdb methods, not possible be tested,
+         *  but the function is worked properly, suggest to create a public method to test,
+         *  otherwise need to reference "reflection" to test it */
+    }
+
+//    String input = "addtable Wombat\n" +
+//            "insert Wombat TestWombat 50\n" +
+//            "select * from Wombat\nquit\n";
 
 }

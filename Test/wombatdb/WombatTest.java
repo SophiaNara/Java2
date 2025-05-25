@@ -141,7 +141,7 @@ class WombatTest {
     @DisplayName("W 6-5 Test an argument is in ClassCastException")
     void testCompareClassCastException() {
 
-        Frog frog = new Frog("Fred", "Blue", 11, 10);
+        Frog frog = new Frog("Fred", "Blue", "11", "10");
         assertThrows(ClassCastException.class, () -> w20.compare(w20, frog));
 
     }
