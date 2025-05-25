@@ -1,13 +1,12 @@
 package wombatdb;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.PrintStream;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,34 +14,66 @@ import static org.junit.jupiter.api.Assertions.*;
 class WombatDBTest {
 
     private final ByteArrayOutputStream outResult = new ByteArrayOutputStream();
-    private WombatDBapi dBapi;
+    private WombatDB db;
+
+    private final InputStream originalIn = System.in;
+    private final PrintStream originalOut = System.out;
 
     @BeforeEach
     public void setUpStream() {
         System.setOut(new PrintStream(outResult));
-        dBapi = new WombatDBapi();
     }
 
     @AfterEach
     public void cleanUpStreams() {
-        System.setOut(null);
+        System.setIn(originalIn);
+        System.setOut(originalOut);
     }
 
-    private void simulateInput (String input) {
+    void input(String input) {
+        input = input + "\nquit\n";
         System.setIn(new ByteArrayInputStream(input.getBytes()));
     }
 
     @Test
-    void testSplitLine() throws Exception {
-        ArrayList<String> result = dBapi.splitLine("AddTable MockComponent");
-        assertEquals(2, result.size());
-        assertEquals("addtable", result.get(0));
-        assertEquals("MockComponent", result.get(1));
+    @DisplayName("Test addtable command")
+    void testAddtable() {
+        input("addtable Wombat");
+        new WombatDB().commandLoop();
+        String output = outResult.toString();
+//         assertEquals("Starting command loop\n" +
+//                 "1? Command = addtable\n" +
+//                 "Parameter 1 = Wombat\n" +
+//                 "2? Command = quit", output);
+        assertTrue(output.contains("Command = addtable"));
+        assertTrue(output.contains("Parameter 1 = Wombat"));
+
     }
 
     @Test
-    void commandLoop() {
+    @DisplayName("Test do_insert(input）command")
+    void testDo_insert() {
+        input("addtable Wombat\ninsert Wombat 001 Alice");
+        new WombatDB().commandLoop();
+        String output = outResult.toString();
+        assertAll(
+                () -> assertTrue(output.contains("Parameter 1 = Wombat")),
+                () -> assertTrue(output.contains("Parameter 2 = 001")),
+                () -> assertTrue(output.contains("Parameter 3 = Alice"))
+        );
 
+//                 assertEquals("Starting command loop\n"+
+//                         "1? Command = addtable\n"+
+//                         "Parameter 1 = Wombat\n"+
+//                         "2? Command = insert\n"+
+//                         "Parameter 1 = Wombat\n"+
+//                         "Parameter 2 = 001\n"+
+//                         "Parameter 3 = Alice", output);
     }
+
+
+
+
+
 
 }
