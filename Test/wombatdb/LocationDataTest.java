@@ -10,12 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class LocationDataTest {
 
-//    建構子是否正確建立物件
-//    getNumberOfColumns() 是否回傳 3
-//    getColumn() 是否正確回傳欄位值
-//    getColumnName() 是否正確回傳欄位名稱
-//    toString() 是否正確格式化輸出
-//    錯誤處理（例如：傳入無效的欄位索引）
     LocationData loc1;
     LocationData loc2;
     LocationData loc3;

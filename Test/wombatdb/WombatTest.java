@@ -34,7 +34,6 @@ class WombatTest {
     @Test
     @DisplayName("W 1 Test new wombat constructor and toString.")
     void testToString() {
-
         String Expected ="Wombat:  id = 1000, name = Zoe, length = 4cm" ;
         Wombat w3 = new Wombat("Faith", "5");
         String Expected2 ="Wombat:  id = 1003, name = Faith, length = 5cm" ;
@@ -42,8 +41,6 @@ class WombatTest {
                 () -> assertEquals(Expected, w20.toString()),
                 () -> assertEquals(Expected2, w3.toString())
         );
-
-
     }
 
     @Test
@@ -125,14 +122,13 @@ class WombatTest {
         // System.out.println(result);
         assertEquals(0, result);
     }
-    /** This method is use default constructor, because hypothesise compare ID,
-     * it is not possible same id in here)
+    /** This method is use default constructor (id = -1), because my hypothesise is to compare ID,
+     * it is not possible get the same id with new constructor.
     */
 
     @Test
     @DisplayName("W 6-3 Test an argument is null")
     void testCompareWithNull() {
-
         assertThrows( NullPointerException.class ,() -> w20.compare(w20, null));
         assertThrows( NullPointerException.class ,() -> w30.compare(null, w30));
     }
@@ -140,10 +136,8 @@ class WombatTest {
     @Test
     @DisplayName("W 6-5 Test an argument is in ClassCastException")
     void testCompareClassCastException() {
-
         Frog frog = new Frog("Fred", "Blue", "11", "10");
         assertThrows(ClassCastException.class, () -> w20.compare(w20, frog));
-
     }
 
 }

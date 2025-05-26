@@ -234,8 +234,26 @@ class WombatDBTest {
          *  otherwise need to reference "reflection" to test it */
     }
 
-//    String input = "addtable Wombat\n" +
-//            "insert Wombat TestWombat 50\n" +
-//            "select * from Wombat\nquit\n";
+
+    @Test
+    @DisplayName("Stage 8-1 Test select column from table ")
+    void testSelectIndexOfFrom() {
+        input(" addtable Frog\n"+
+                " insert Frog kermit green 50 1\n" +
+                " insert Frog kermit green 50 junk\n" + /* Expected result: Invalid parameter list: insert*/
+                " select * 1\n" +
+                " select 1 from NotAClass\n" +
+                " select 1 2 3 4 5 6 from Frog\n" );
+
+        new WombatDB().commandLoop();
+        String output = outResult.toString();
+        //assertEquals("", output);
+        assertAll(
+                () -> assertTrue(output.contains("Invalid parameter list: insert")),
+                () -> assertTrue(output.contains("Invalid parameter list: select")),
+                () -> assertTrue(output.contains("Invalid table name: NotAClass")),
+                () -> assertTrue(output.contains("Parameter 8 = Frog"))
+        );
+    }
 
 }
